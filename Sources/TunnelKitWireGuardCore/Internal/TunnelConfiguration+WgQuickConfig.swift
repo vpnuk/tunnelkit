@@ -73,7 +73,7 @@ extension TunnelConfiguration {
                     } else {
                         attributes[key] = value
                     }
-                    let interfaceSectionKeys: Set<String> = ["privatekey", "listenport", "address", "dns", "dnsoverhttpsurl", "dnsovertlsservername", "mtu"]
+                    let interfaceSectionKeys: Set<String> = ["privatekey", "listenport", "address", "dns", "mtu"]
                     let peerSectionKeys: Set<String> = ["publickey", "presharedkey", "allowedips", "endpoint", "persistentkeepalive"]
                     if parserState == .inInterfaceSection {
                         guard interfaceSectionKeys.contains(key) else {
@@ -202,12 +202,6 @@ extension TunnelConfiguration {
             }
             interface.dns = dnsServers
             interface.dnsSearch = dnsSearch
-        }
-        if let dnsHTTPSURL = attributes["dnsoverhttpsurl"] {
-            interface.dnsHTTPSURL = URL(string: dnsHTTPSURL)
-        }
-        if let dnsTLSServerName = attributes["dnsovertlsservername"] {
-            interface.dnsTLSServerName = dnsTLSServerName
         }
         if let mtuString = attributes["mtu"] {
             guard let mtu = UInt16(mtuString) else {
