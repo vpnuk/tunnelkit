@@ -134,21 +134,13 @@ extension WireGuard {
         }
 
         public var dnsHTTPSURL: URL? {
-            get {
-                interface.dnsHTTPSURL
-            }
-            set {
-                interface.dnsHTTPSURL = newValue
-            }
+            get { nil }
+            set { }
         }
 
         public var dnsTLSServerName: String? {
-            get {
-                interface.dnsTLSServerName
-            }
-            set {
-                interface.dnsTLSServerName = newValue
-            }
+            get { nil }
+            set { }
         }
 
         public var mtu: UInt16? {
@@ -278,13 +270,9 @@ extension WireGuard {
             interface.dnsSearch
         }
 
-        public var dnsHTTPSURL: URL? {
-            interface.dnsHTTPSURL
-        }
+        public var dnsHTTPSURL: URL? { nil }
 
-        public var dnsTLSServerName: String? {
-            interface.dnsTLSServerName
-        }
+        public var dnsTLSServerName: String? { nil }
 
         public var mtu: UInt16? {
             interface.mtu
