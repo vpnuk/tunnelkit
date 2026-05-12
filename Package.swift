@@ -9,22 +9,10 @@ let package = Package(
         .tvOS(.v17)
     ],
     products: [
-        .library(
-            name: "TunnelKit",
-            targets: ["TunnelKit"]
-        ),
-        .library(
-            name: "TunnelKitOpenVPN",
-            targets: ["TunnelKitOpenVPN"]
-        ),
-        .library(
-            name: "TunnelKitOpenVPNAppExtension",
-            targets: ["TunnelKitOpenVPNAppExtension"]
-        ),
-        .library(
-            name: "TunnelKitLZO",
-            targets: ["TunnelKitLZO"]
-        )
+        .library(name: "TunnelKit", targets: ["TunnelKit"]),
+        .library(name: "TunnelKitOpenVPN", targets: ["TunnelKitOpenVPN"]),
+        .library(name: "TunnelKitOpenVPNAppExtension", targets: ["TunnelKitOpenVPNAppExtension"]),
+        .library(name: "TunnelKitLZO", targets: ["TunnelKitLZO"])
     ],
     dependencies: [
         .package(url: "https://github.com/SwiftyBeaver/SwiftyBeaver", from: "1.9.0"),
@@ -33,37 +21,23 @@ let package = Package(
     targets: [
         .target(
             name: "TunnelKit",
-            dependencies: [
-                "TunnelKitCore",
-                "TunnelKitManager"
-            ]
+            dependencies: ["TunnelKitCore", "TunnelKitManager"]
         ),
         .target(
             name: "TunnelKitCore",
-            dependencies: [
-                "__TunnelKitUtils",
-                "CTunnelKitCore",
-                "SwiftyBeaver"
-            ]
+            dependencies: ["__TunnelKitUtils", "CTunnelKitCore", "SwiftyBeaver"]
         ),
         .target(
             name: "TunnelKitManager",
-            dependencies: [
-                "SwiftyBeaver"
-            ]
+            dependencies: ["SwiftyBeaver"]
         ),
         .target(
             name: "TunnelKitAppExtension",
-            dependencies: [
-                "TunnelKitCore"
-            ]
+            dependencies: ["TunnelKitCore"]
         ),
         .target(
             name: "TunnelKitOpenVPN",
-            dependencies: [
-                "TunnelKitOpenVPNCore",
-                "TunnelKitOpenVPNManager"
-            ]
+            dependencies: ["TunnelKitOpenVPNCore", "TunnelKitOpenVPNManager"]
         ),
         .target(
             name: "TunnelKitOpenVPNCore",
@@ -75,17 +49,11 @@ let package = Package(
         ),
         .target(
             name: "TunnelKitOpenVPNManager",
-            dependencies: [
-                "TunnelKitManager",
-                "TunnelKitOpenVPNCore"
-            ]
+            dependencies: ["TunnelKitManager", "TunnelKitOpenVPNCore"]
         ),
         .target(
             name: "TunnelKitOpenVPNProtocol",
-            dependencies: [
-                "TunnelKitOpenVPNCore",
-                "CTunnelKitOpenVPNProtocol"
-            ]
+            dependencies: ["TunnelKitOpenVPNCore", "CTunnelKitOpenVPNProtocol"]
         ),
         .target(
             name: "TunnelKitOpenVPNAppExtension",
@@ -106,13 +74,18 @@ let package = Package(
                 "lib/testmini.c"
             ]
         ),
+        // C targets
         .target(
             name: "CTunnelKitCore",
             dependencies: []
         ),
         .target(
             name: "CTunnelKitOpenVPNCore",
-            dependencies: []
+            dependencies: [],
+            cSettings: [
+                // Allocation.h, ZeroingData.h live in CTunnelKitCore/include
+                .headerSearchPath("../CTunnelKitCore/include")
+            ]
         ),
         .target(
             name: "CTunnelKitOpenVPNProtocol",
@@ -120,6 +93,12 @@ let package = Package(
                 "CTunnelKitCore",
                 "CTunnelKitOpenVPNCore",
                 "openssl-apple"
+            ],
+            cSettings: [
+                // Allocation.h, ZeroingData.h
+                .headerSearchPath("../CTunnelKitCore/include"),
+                // Errors.h, XORMethodNative.h, CompressionAlgorithmNative.h
+                .headerSearchPath("../CTunnelKitOpenVPNCore/include")
             ]
         ),
         .target(
@@ -146,16 +125,11 @@ let package = Package(
                 "DataPathPerformanceTests.swift",
                 "EncryptionPerformanceTests.swift"
             ],
-            resources: [
-                .process("Resources")
-            ]
+            resources: [.process("Resources")]
         ),
         .testTarget(
             name: "TunnelKitLZOTests",
-            dependencies: [
-                "TunnelKitCore",
-                "TunnelKitLZO"
-            ]
+            dependencies: ["TunnelKitCore", "TunnelKitLZO"]
         )
     ]
 )
