@@ -1,17 +1,18 @@
 // swift-tools-version:5.7
-// The swift-tools-version declares the minimum version of Swift required to build this package.
-
 import PackageDescription
+
+// WireGuard targets and wireguard-apple dependency removed —
+// this fork is OpenVPN-only for tvOS. WireGuard is handled
+// natively via libwg-go.a without any SPM dependency.
 
 let package = Package(
     name: "TunnelKit",
     platforms: [
         .iOS(.v15),
         .macOS(.v12),
-        .tvOS(.v16)
+        .tvOS(.v17)
     ],
     products: [
-        // Products define the executables and libraries a package produces, and make them visible to other packages.
         .library(
             name: "TunnelKit",
             targets: ["TunnelKit"]
@@ -25,32 +26,15 @@ let package = Package(
             targets: ["TunnelKitOpenVPNAppExtension"]
         ),
         .library(
-            name: "TunnelKitWireGuard",
-            targets: ["TunnelKitWireGuard"]
-        ),
-        .library(
-            name: "TunnelKitWireGuardAppExtension",
-            targets: ["TunnelKitWireGuardAppExtension"]
-        ),
-        .library(
             name: "TunnelKitLZO",
             targets: ["TunnelKitLZO"]
         )
     ],
     dependencies: [
-        // Dependencies declare other packages that this package depends on.
-        // .package(url: /* package url */, from: "1.0.0"),
         .package(url: "https://github.com/SwiftyBeaver/SwiftyBeaver", from: "1.9.0"),
         .package(url: "https://github.com/passepartoutvpn/openssl-apple", from: "3.2.105"),
-//        .package(url: "https://git.zx2c4.com/wireguard-apple", .exact: Version("1.0.15-26")),
-//        .package(url: "https://github.com/passepartoutvpn/wireguard-apple", exact: Version("1.0.17")),
-        .package(url: "https://github.com/vpnuk/wireguard-apple", branch: "master")
-//        .package(url: "https://github.com/passepartoutvpn/wireguard-apple", branch: "develop")
-//        .package(name: "WireGuardKit", path: "../wireguard-apple")
     ],
     targets: [
-        // Targets are the basic building blocks of a package. A target can define a module or a test suite.
-        // Targets can depend on other targets in this package, and on products in packages this package depends on.
         .target(
             name: "TunnelKit",
             dependencies: [
@@ -81,13 +65,12 @@ let package = Package(
                 "TunnelKitOpenVPNCore",
                 "TunnelKitOpenVPNManager"
             ]),
-        //
         .target(
             name: "TunnelKitOpenVPNCore",
             dependencies: [
                 "TunnelKitCore",
                 "CTunnelKitOpenVPNCore",
-                "CTunnelKitOpenVPNProtocol" // FIXME: remove dependency on TLSBox
+                "CTunnelKitOpenVPNProtocol"
             ]),
         .target(
             name: "TunnelKitOpenVPNManager",
@@ -109,33 +92,6 @@ let package = Package(
                 "TunnelKitOpenVPNManager",
                 "TunnelKitOpenVPNProtocol"
             ]),
-        //
-        .target(
-            name: "TunnelKitWireGuard",
-            dependencies: [
-                "TunnelKitWireGuardCore",
-                "TunnelKitWireGuardManager"
-            ]),
-        .target(
-            name: "TunnelKitWireGuardCore",
-            dependencies: [
-                "__TunnelKitUtils",
-                "TunnelKitCore",
-                .product(name: "WireGuardKit", package: "wireguard-apple"),
-                "SwiftyBeaver"
-            ]),
-        .target(
-            name: "TunnelKitWireGuardManager",
-            dependencies: [
-                "TunnelKitManager",
-                "TunnelKitWireGuardCore"
-            ]),
-        .target(
-            name: "TunnelKitWireGuardAppExtension",
-            dependencies: [
-                "TunnelKitWireGuardCore",
-                "TunnelKitWireGuardManager"
-            ]),
         .target(
             name: "TunnelKitLZO",
             dependencies: [],
@@ -145,7 +101,6 @@ let package = Package(
                 "lib/README.LZO",
                 "lib/testmini.c"
             ]),
-        //
         .target(
             name: "CTunnelKitCore",
             dependencies: []),
@@ -162,7 +117,6 @@ let package = Package(
         .target(
             name: "__TunnelKitUtils",
             dependencies: []),
-        //
         .testTarget(
             name: "TunnelKitCoreTests",
             dependencies: [
