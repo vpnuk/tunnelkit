@@ -1,9 +1,5 @@
-// swift-tools-version:5.7
+// swift-tools-version: 5.7
 import PackageDescription
-
-// WireGuard targets and wireguard-apple dependency removed —
-// this fork is OpenVPN-only for tvOS. WireGuard is handled
-// natively via libwg-go.a without any SPM dependency.
 
 let package = Package(
     name: "TunnelKit",
@@ -32,7 +28,7 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/SwiftyBeaver/SwiftyBeaver", from: "1.9.0"),
-        .package(url: "https://github.com/passepartoutvpn/openssl-apple", from: "3.2.105"),
+        .package(url: "https://github.com/passepartoutvpn/openssl-apple", from: "3.2.105")
     ],
     targets: [
         .target(
@@ -48,42 +44,49 @@ let package = Package(
                 "__TunnelKitUtils",
                 "CTunnelKitCore",
                 "SwiftyBeaver"
-            ]),
+            ]
+        ),
         .target(
             name: "TunnelKitManager",
             dependencies: [
                 "SwiftyBeaver"
-            ]),
+            ]
+        ),
         .target(
             name: "TunnelKitAppExtension",
             dependencies: [
                 "TunnelKitCore"
-            ]),
+            ]
+        ),
         .target(
             name: "TunnelKitOpenVPN",
             dependencies: [
                 "TunnelKitOpenVPNCore",
                 "TunnelKitOpenVPNManager"
-            ]),
+            ]
+        ),
         .target(
             name: "TunnelKitOpenVPNCore",
             dependencies: [
                 "TunnelKitCore",
                 "CTunnelKitOpenVPNCore",
                 "CTunnelKitOpenVPNProtocol"
-            ]),
+            ]
+        ),
         .target(
             name: "TunnelKitOpenVPNManager",
             dependencies: [
                 "TunnelKitManager",
                 "TunnelKitOpenVPNCore"
-            ]),
+            ]
+        ),
         .target(
             name: "TunnelKitOpenVPNProtocol",
             dependencies: [
                 "TunnelKitOpenVPNCore",
                 "CTunnelKitOpenVPNProtocol"
-            ]),
+            ]
+        ),
         .target(
             name: "TunnelKitOpenVPNAppExtension",
             dependencies: [
@@ -91,7 +94,8 @@ let package = Package(
                 "TunnelKitOpenVPNCore",
                 "TunnelKitOpenVPNManager",
                 "TunnelKitOpenVPNProtocol"
-            ]),
+            ]
+        ),
         .target(
             name: "TunnelKitLZO",
             dependencies: [],
@@ -100,33 +104,37 @@ let package = Package(
                 "lib/Makefile",
                 "lib/README.LZO",
                 "lib/testmini.c"
-            ]),
+            ]
+        ),
         .target(
             name: "CTunnelKitCore",
-            dependencies: []),
+            dependencies: []
+        ),
         .target(
             name: "CTunnelKitOpenVPNCore",
-            dependencies: []),
+            dependencies: []
+        ),
         .target(
             name: "CTunnelKitOpenVPNProtocol",
             dependencies: [
                 "CTunnelKitCore",
                 "CTunnelKitOpenVPNCore",
                 "openssl-apple"
-            ]),
+            ]
+        ),
         .target(
             name: "__TunnelKitUtils",
-            dependencies: []),
+            dependencies: []
+        ),
         .testTarget(
             name: "TunnelKitCoreTests",
-            dependencies: [
-                "TunnelKitCore"
-            ],
+            dependencies: ["TunnelKitCore"],
             exclude: [
                 "RandomTests.swift",
                 "RawPerformanceTests.swift",
                 "RoutingTests.swift"
-            ]),
+            ]
+        ),
         .testTarget(
             name: "TunnelKitOpenVPNTests",
             dependencies: [
@@ -140,12 +148,14 @@ let package = Package(
             ],
             resources: [
                 .process("Resources")
-            ]),
+            ]
+        ),
         .testTarget(
             name: "TunnelKitLZOTests",
             dependencies: [
                 "TunnelKitCore",
                 "TunnelKitLZO"
-            ])
+            ]
+        )
     ]
 )
