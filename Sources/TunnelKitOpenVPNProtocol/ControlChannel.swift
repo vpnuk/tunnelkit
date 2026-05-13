@@ -27,7 +27,7 @@ import Foundation
 import SwiftyBeaver
 import TunnelKitCore
 import TunnelKitOpenVPNCore
-import CTunnelKitOpenVPNProtocol
+import _OVPNBridge
 
 private let log = SwiftyBeaver.self
 
