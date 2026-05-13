@@ -91,9 +91,6 @@ let package = Package(
                 "openssl-apple"
             ],
             cSettings: [
-                // Disable auto module-map discovery so these are plain textual includes,
-                // not @import lookups (which fail for cross-module search paths).
-                .unsafeFlags(["-fno-implicit-module-maps"]),
                 // Allocation.h, ZeroingData.h, LZOFactory.h, CompressionProvider.h
                 .headerSearchPath("../CTunnelKitCore/include"),
                 // Errors.h, XORMethodNative.h, CompressionAlgorithmNative.h, CompressionFramingNative.h
