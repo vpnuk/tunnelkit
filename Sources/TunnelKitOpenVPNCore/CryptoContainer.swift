@@ -37,7 +37,6 @@
 import Foundation
 
 // FIXME: remove dependency on TLSBox
-import _OVPNBridge
 
 extension OpenVPN {
 
