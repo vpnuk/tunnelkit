@@ -202,7 +202,7 @@ extension OpenVPN {
         private func key(at: Int) -> ZeroingData {
             let size = secureData.count / StaticKey.keyCount // 64 bytes each
             assert(size == StaticKey.keyLength)
-            return secureData.withOffset(at * size, count: size)
+            return secureData.withBytesOffset(at * size, count: size)
         }
 
         public static func deserialized(_ data: Data) throws -> StaticKey {
@@ -229,7 +229,7 @@ extension OpenVPN {
 
         public func encode(to encoder: Encoder) throws {
             var container = encoder.container(keyedBy: CodingKeys.self)
-            try container.encode(secureData.toData(), forKey: .data)
+            try container.encode(secureData.toData() as Data, forKey: .data)
             try container.encodeIfPresent(direction, forKey: .dir)
         }
 
