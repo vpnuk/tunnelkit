@@ -1,6 +1,11 @@
 // swift-tools-version: 5.9
 import PackageDescription
 
+// NOTE: TunnelKitBridge.h must exist at ~/Desktop/tvos-source/TunnelKitBridge.h
+// Content: #import "_OVPNBridge.h"
+// Xcode runs the Swift compiler with CWD = VPNClient.xcodeproj/, so ../TunnelKitBridge.h
+// resolves to the project root — a stable path that does not depend on DerivedData UUID.
+
 let package = Package(
     name: "TunnelKit",
     platforms: [
@@ -39,10 +44,10 @@ let package = Package(
             name: "TunnelKitOpenVPN",
             dependencies: ["TunnelKitOpenVPNCore", "TunnelKitOpenVPNManager"]
         ),
-        // _OVPNBridge: C target whose publicHeadersPath is added to the Swift compiler search paths
-        // when listed as a dependency. Swift code does NOT import this as a module — instead the
-        // -import-objc-header flag (absolute path) reads the umbrella header directly, bypassing
-        // module PCM compilation (works around Xcode 26.5 tvOS C-module import failure).
+        // _OVPNBridge: C target whose include/ directory gets added to the Swift compiler
+        // header search paths when listed as a dependency. Swift code does NOT import
+        // this as a module. Instead -import-objc-header reads TunnelKitBridge.h directly
+        // (bypasses module PCM compilation — workaround for Xcode 26.5 tvOS PCM failure).
         .target(
             name: "_OVPNBridge",
             dependencies: [],
@@ -55,10 +60,9 @@ let package = Package(
                 "_OVPNBridge"
             ],
             swiftSettings: [
-                .unsafeFlags([
-                    "-import-objc-header",
-                    "/Users/administrator/Library/Developer/Xcode/DerivedData/VPNClient-aceftmalgixlciezohbxkgbgknlr/SourcePackages/checkouts/tunnelkit/Sources/_OVPNBridge/include/_OVPNBridge.h"
-                ])
+                // ../TunnelKitBridge.h resolves relative to CWD=VPNClient.xcodeproj/
+                // => ~/Desktop/tvos-source/TunnelKitBridge.h (stable, no DerivedData UUID needed)
+                .unsafeFlags(["-import-objc-header", "../TunnelKitBridge.h"])
             ]
         ),
         .target(
@@ -73,10 +77,7 @@ let package = Package(
                 "_OVPNBridge"
             ],
             swiftSettings: [
-                .unsafeFlags([
-                    "-import-objc-header",
-                    "/Users/administrator/Library/Developer/Xcode/DerivedData/VPNClient-aceftmalgixlciezohbxkgbgknlr/SourcePackages/checkouts/tunnelkit/Sources/_OVPNBridge/include/_OVPNBridge.h"
-                ])
+                .unsafeFlags(["-import-objc-header", "../TunnelKitBridge.h"])
             ]
         ),
         .target(
@@ -88,10 +89,7 @@ let package = Package(
                 "TunnelKitOpenVPNProtocol"
             ],
             swiftSettings: [
-                .unsafeFlags([
-                    "-import-objc-header",
-                    "/Users/administrator/Library/Developer/Xcode/DerivedData/VPNClient-aceftmalgixlciezohbxkgbgknlr/SourcePackages/checkouts/tunnelkit/Sources/_OVPNBridge/include/_OVPNBridge.h"
-                ])
+                .unsafeFlags(["-import-objc-header", "../TunnelKitBridge.h"])
             ]
         ),
         .target(
