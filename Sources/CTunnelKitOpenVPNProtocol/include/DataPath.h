@@ -35,8 +35,8 @@
 //
 
 #import <Foundation/Foundation.h>
-
-@import CTunnelKitOpenVPNCore;
+#import "CompressionFramingNative.h"
+#import "CompressionAlgorithmNative.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
