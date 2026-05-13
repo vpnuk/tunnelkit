@@ -78,15 +78,14 @@ public final class ZeroingData: NSObject {
 
     @objc(initWithString:nullTerminated:)
     public init(string: String, nullTerminated: Bool) {
-        let utf8 = Array(string.utf8)
-        let len = utf8.count
+        let utf8Bytes = Array(string.utf8)
+        let len = utf8Bytes.count
         _count = len + (nullTerminated ? 1 : 0)
         _bytes = ZeroingData.alloc(_count)
-        utf8.withUnsafeBytes { if let b = $0.baseAddress, len > 0 {
-            _bytes.initialize(from: b.assumingMemoryBound(to: UInt8.self), count: len)
-        }}
-        if nullTerminated { _bytes[len] = 0 }
         super.init()
+        // Phase 2: safe to use self after super.init()
+        for i in 0..<len { _bytes[i] = utf8Bytes[i] }
+        if nullTerminated { _bytes[len] = 0 }
     }
 
     fileprivate init(nocopy ptr: UnsafeMutablePointer<UInt8>, count: Int) {
