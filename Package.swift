@@ -25,8 +25,6 @@ let package = Package(
         ),
         .target(
             name: "TunnelKitCore",
-            // CTunnelKitCore removed: ZeroingData is now a pure-Swift @objc class
-            // in ZeroingDataSwift.swift, eliminating the C module import issue.
             dependencies: ["__TunnelKitUtils", "SwiftyBeaver"]
         ),
         .target(
@@ -41,12 +39,20 @@ let package = Package(
             name: "TunnelKitOpenVPN",
             dependencies: ["TunnelKitOpenVPNCore", "TunnelKitOpenVPNManager"]
         ),
+        // _OVPNBridge: single self-contained C module replacing CTunnelKitOpenVPNCore +
+        // CTunnelKitOpenVPNProtocol for Swift imports. Has no deps beyond Foundation so
+        // the module PCM compiles trivially. ObjC implementations are still in
+        // CTunnelKitCore/CTunnelKitOpenVPNProtocol and linked at the app/extension level.
+        .target(
+            name: "_OVPNBridge",
+            dependencies: [],
+            publicHeadersPath: "include"
+        ),
         .target(
             name: "TunnelKitOpenVPNCore",
             dependencies: [
                 "TunnelKitCore",
-                "CTunnelKitOpenVPNCore",
-                "CTunnelKitOpenVPNProtocol"
+                "_OVPNBridge"
             ]
         ),
         .target(
@@ -55,7 +61,11 @@ let package = Package(
         ),
         .target(
             name: "TunnelKitOpenVPNProtocol",
-            dependencies: ["TunnelKitOpenVPNCore", "CTunnelKitOpenVPNProtocol"]
+            dependencies: [
+                "TunnelKitOpenVPNCore",
+                "CTunnelKitOpenVPNProtocol",
+                "_OVPNBridge"
+            ]
         ),
         .target(
             name: "TunnelKitOpenVPNAppExtension",
@@ -76,12 +86,11 @@ let package = Package(
                 "lib/testmini.c"
             ]
         ),
-        // C targets
+        // C targets — compiled and linked but no longer imported as Swift modules.
+        // Swift code uses _OVPNBridge for type info instead.
         .target(
             name: "CTunnelKitCore",
             dependencies: [],
-            // ZeroingData.m excluded: implementation is now the Swift @objc class in TunnelKitCore.
-            // LZOFactory.m and Allocation.m remain for CTunnelKitOpenVPNProtocol C code.
             exclude: ["ZeroingData.m"]
         ),
         .target(
@@ -96,9 +105,7 @@ let package = Package(
                 "openssl-apple"
             ],
             cSettings: [
-                // Allocation.h, ZeroingData.h, LZOFactory.h, CompressionProvider.h
                 .headerSearchPath("../CTunnelKitCore/include"),
-                // Errors.h, XORMethodNative.h, CompressionAlgorithmNative.h, CompressionFramingNative.h
                 .headerSearchPath("../CTunnelKitOpenVPNCore/include")
             ]
         ),
