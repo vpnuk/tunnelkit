@@ -35,7 +35,6 @@
 //
 
 import Foundation
-import _OVPNBridge
 
 /// The possible errors raised/thrown during `OpenVPNSession` operation.
 public enum OpenVPNError: Error {
