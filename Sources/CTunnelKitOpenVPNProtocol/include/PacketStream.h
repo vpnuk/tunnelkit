@@ -24,7 +24,8 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "XORMethodNative.h"
+// XOR.h defines XORMethodNative inline (self-contained, no cross-module import)
+#import "XOR.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
