@@ -26,7 +26,7 @@
 import Foundation
 import TunnelKitCore
 import TunnelKitOpenVPNCore
-import CTunnelKitOpenVPNProtocol
+import _OVPNBridge
 
 extension OpenVPN {
 
