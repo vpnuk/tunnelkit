@@ -24,7 +24,20 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "XORMethodNative.h"
+
+// Inline XORMethodNative so this header is self-contained.
+// (XORMethodNative.h lives in CTunnelKitOpenVPNCore — importing it here
+//  via @import or a cross-module path breaks the SPM module graph.)
+#ifndef XORMethodNative_defined
+#define XORMethodNative_defined
+typedef NS_ENUM(NSInteger, XORMethodNative) {
+    XORMethodNativeNone,
+    XORMethodNativeMask,
+    XORMethodNativePtrPos,
+    XORMethodNativeReverse,
+    XORMethodNativeObfuscate
+};
+#endif
 
 static inline void xor_mask(uint8_t *dst, const uint8_t *src, NSData *xorMask, size_t length)
 {
