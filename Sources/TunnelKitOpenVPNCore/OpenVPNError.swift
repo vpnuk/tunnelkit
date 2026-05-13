@@ -35,7 +35,7 @@
 //
 
 import Foundation
-import CTunnelKitOpenVPNCore
+import _OVPNBridge
 
 /// The possible errors raised/thrown during `OpenVPNSession` operation.
 public enum OpenVPNError: Error {
