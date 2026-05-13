@@ -188,7 +188,45 @@ typedef BOOL (^DataPathParseBlock)(uint8_t *payload,
 
 // ── Forward declarations ──────────────────────────────────────────────────────
 
-@class ZeroingData;
+// ── CTunnelKitCore types ─────────────────────────────────────────────────────
+
+void *allocate_safely(size_t size);
+size_t safe_crypto_capacity(size_t size, size_t overhead);
+
+@protocol CompressionProvider
+- (nullable NSData *)compressedDataWithData:(NSData *)data error:(NSError **)error;
+- (nullable NSData *)decompressedDataWithData:(NSData *)data error:(NSError **)error;
+- (nullable NSData *)decompressedDataWithBytes:(const uint8_t *)bytes length:(NSInteger)length error:(NSError **)error;
+@end
+
+@interface ZeroingData : NSObject
+@property (nonatomic, readonly) const uint8_t *bytes;
+@property (nonatomic, readonly) uint8_t *mutableBytes;
+@property (nonatomic, readonly) NSInteger count;
+- (instancetype)initWithCount:(NSInteger)count;
+- (instancetype)initWithBytes:(nullable const uint8_t *)bytes count:(NSInteger)count;
+- (instancetype)initWithUInt8:(uint8_t)uint8;
+- (instancetype)initWithUInt16:(uint16_t)uint16;
+- (instancetype)initWithData:(NSData *)data;
+- (instancetype)initWithData:(NSData *)data offset:(NSInteger)offset count:(NSInteger)count;
+- (instancetype)initWithString:(NSString *)string nullTerminated:(BOOL)nullTerminated;
+- (void)appendData:(ZeroingData *)other;
+- (void)removeUntilOffset:(NSInteger)until;
+- (void)zero;
+- (ZeroingData *)appendingData:(ZeroingData *)other;
+- (ZeroingData *)withOffset:(NSInteger)offset count:(NSInteger)count;
+- (uint16_t)UInt16ValueFromOffset:(NSInteger)from;
+- (uint16_t)networkUInt16ValueFromOffset:(NSInteger)from;
+- (nullable NSString *)nullTerminatedStringFromOffset:(NSInteger)from;
+- (BOOL)isEqualToData:(NSData *)data;
+- (NSData *)toData;
+- (NSString *)toHex;
+@end
+
+@interface LZOFactory : NSObject
++ (BOOL)isSupported;
++ (id<CompressionProvider>)create;
+@end
 
 // ── DataPath protocols ────────────────────────────────────────────────────────
 
