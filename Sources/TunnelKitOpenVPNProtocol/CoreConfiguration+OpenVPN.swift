@@ -36,7 +36,7 @@
 
 import Foundation
 import TunnelKitCore
-import CTunnelKitOpenVPNProtocol
+import _OVPNBridge
 
 extension CoreConfiguration {
     struct OpenVPN {
