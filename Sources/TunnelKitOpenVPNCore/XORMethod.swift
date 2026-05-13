@@ -24,7 +24,7 @@
 //
 
 import Foundation
-import CTunnelKitOpenVPNCore
+import _OVPNBridge
 
 extension OpenVPN {
 
