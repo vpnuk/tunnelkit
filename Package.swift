@@ -25,7 +25,9 @@ let package = Package(
         ),
         .target(
             name: "TunnelKitCore",
-            dependencies: ["__TunnelKitUtils", "CTunnelKitCore", "SwiftyBeaver"]
+            // CTunnelKitCore removed: ZeroingData is now a pure-Swift @objc class
+            // in ZeroingDataSwift.swift, eliminating the C module import issue.
+            dependencies: ["__TunnelKitUtils", "SwiftyBeaver"]
         ),
         .target(
             name: "TunnelKitManager",
@@ -77,7 +79,10 @@ let package = Package(
         // C targets
         .target(
             name: "CTunnelKitCore",
-            dependencies: []
+            dependencies: [],
+            // ZeroingData.m excluded: implementation is now the Swift @objc class in TunnelKitCore.
+            // LZOFactory.m and Allocation.m remain for CTunnelKitOpenVPNProtocol C code.
+            exclude: ["ZeroingData.m"]
         ),
         .target(
             name: "CTunnelKitOpenVPNCore",
@@ -129,3 +134,4 @@ let package = Package(
         )
     ]
 )
+
