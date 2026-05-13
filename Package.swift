@@ -39,10 +39,9 @@ let package = Package(
             name: "TunnelKitOpenVPN",
             dependencies: ["TunnelKitOpenVPNCore", "TunnelKitOpenVPNManager"]
         ),
-        // _OVPNBridge: single self-contained C module replacing CTunnelKitOpenVPNCore +
-        // CTunnelKitOpenVPNProtocol for Swift imports. Has no deps beyond Foundation so
-        // the module PCM compiles trivially. ObjC implementations are still in
-        // CTunnelKitCore/CTunnelKitOpenVPNProtocol and linked at the app/extension level.
+        // _OVPNBridge: provides header search paths for the -import-objc-header bridging approach.
+        // Swift targets do NOT import this as a module — they use the bridging header flag instead,
+        // bypassing module PCM compilation entirely (works around Xcode 26.5 tvOS C module import failure).
         .target(
             name: "_OVPNBridge",
             dependencies: [],
@@ -53,6 +52,11 @@ let package = Package(
             dependencies: [
                 "TunnelKitCore",
                 "_OVPNBridge"
+            ],
+            swiftSettings: [
+                // Bridging header: makes CTunnelKitOpenVPNCore + CTunnelKitOpenVPNProtocol ObjC types
+                // visible without module imports (workaround for Xcode 26.5 tvOS C module PCM failure).
+                .unsafeFlags(["-import-objc-header", "Sources/_OVPNBridge/include/_OVPNBridge.h"])
             ]
         ),
         .target(
@@ -65,6 +69,9 @@ let package = Package(
                 "TunnelKitOpenVPNCore",
                 "CTunnelKitOpenVPNProtocol",
                 "_OVPNBridge"
+            ],
+            swiftSettings: [
+                .unsafeFlags(["-import-objc-header", "Sources/_OVPNBridge/include/_OVPNBridge.h"])
             ]
         ),
         .target(
@@ -74,6 +81,9 @@ let package = Package(
                 "TunnelKitOpenVPNCore",
                 "TunnelKitOpenVPNManager",
                 "TunnelKitOpenVPNProtocol"
+            ],
+            swiftSettings: [
+                .unsafeFlags(["-import-objc-header", "Sources/_OVPNBridge/include/_OVPNBridge.h"])
             ]
         ),
         .target(
@@ -86,8 +96,7 @@ let package = Package(
                 "lib/testmini.c"
             ]
         ),
-        // C targets — compiled and linked but no longer imported as Swift modules.
-        // Swift code uses _OVPNBridge for type info instead.
+        // C targets — compiled and linked but NOT imported as Swift modules.
         .target(
             name: "CTunnelKitCore",
             dependencies: [],
