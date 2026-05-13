@@ -35,8 +35,27 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "CompressionFramingNative.h"
-#import "CompressionAlgorithmNative.h"
+
+// Inline the compression enums so this header is self-contained.
+// (Avoids @import CTunnelKitOpenVPNCore which breaks SPM module graph)
+#ifndef CompressionFramingNative_defined
+#define CompressionFramingNative_defined
+typedef NS_ENUM(NSInteger, CompressionFramingNative) {
+    CompressionFramingNativeDisabled,
+    CompressionFramingNativeCompLZO,
+    CompressionFramingNativeCompress,
+    CompressionFramingNativeCompressV2
+};
+#endif
+
+#ifndef CompressionAlgorithmNative_defined
+#define CompressionAlgorithmNative_defined
+typedef NS_ENUM(NSInteger, CompressionAlgorithmNative) {
+    CompressionAlgorithmNativeDisabled,
+    CompressionAlgorithmNativeLZO,
+    CompressionAlgorithmNativeOther
+};
+#endif
 
 NS_ASSUME_NONNULL_BEGIN
 
