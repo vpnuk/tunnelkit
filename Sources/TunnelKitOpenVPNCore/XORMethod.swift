@@ -24,7 +24,6 @@
 //
 
 import Foundation
-import _OVPNBridge
 
 extension OpenVPN {
 
