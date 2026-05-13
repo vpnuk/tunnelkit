@@ -81,11 +81,7 @@ let package = Package(
         ),
         .target(
             name: "CTunnelKitOpenVPNCore",
-            dependencies: [],
-            cSettings: [
-                // Allocation.h, ZeroingData.h live in CTunnelKitCore/include
-                .headerSearchPath("../CTunnelKitCore/include")
-            ]
+            dependencies: []
         ),
         .target(
             name: "CTunnelKitOpenVPNProtocol",
@@ -95,9 +91,12 @@ let package = Package(
                 "openssl-apple"
             ],
             cSettings: [
-                // Allocation.h, ZeroingData.h
+                // Disable auto module-map discovery so these are plain textual includes,
+                // not @import lookups (which fail for cross-module search paths).
+                .unsafeFlags(["-fno-implicit-module-maps"]),
+                // Allocation.h, ZeroingData.h, LZOFactory.h, CompressionProvider.h
                 .headerSearchPath("../CTunnelKitCore/include"),
-                // Errors.h, XORMethodNative.h, CompressionAlgorithmNative.h
+                // Errors.h, XORMethodNative.h, CompressionAlgorithmNative.h, CompressionFramingNative.h
                 .headerSearchPath("../CTunnelKitOpenVPNCore/include")
             ]
         ),
