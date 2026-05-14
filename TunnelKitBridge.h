@@ -319,10 +319,10 @@ extern const NSInteger TLSBoxDefaultSecurityLevel;
 + (BOOL)preparePRNGWithSeed:(const uint8_t *)seed length:(NSInteger)length;
 - (instancetype)initWithCipherAlgorithm:(nullable NSString *)cipherAlgorithm
                         digestAlgorithm:(nullable NSString *)digestAlgorithm;
-- (BOOL)configureWithCipherEncKey:(nullable ZeroingData *)cipherEncKey
-                     cipherDecKey:(nullable ZeroingData *)cipherDecKey
-                       hmacEncKey:(nullable ZeroingData *)hmacEncKey
-                       hmacDecKey:(nullable ZeroingData *)hmacDecKey
+- (BOOL)configureWithCipherEncKey:(nullable NSObject *)cipherEncKey
+                     cipherDecKey:(nullable NSObject *)cipherDecKey
+                       hmacEncKey:(nullable NSObject *)hmacEncKey
+                       hmacDecKey:(nullable NSObject *)hmacDecKey
                             error:(NSError **)error;
 + (BOOL)hmacWithDigestName:(NSString *)digestName
                     secret:(const uint8_t *)secret
