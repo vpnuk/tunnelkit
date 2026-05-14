@@ -125,7 +125,6 @@ public final class ZeroingData: NSObject {
         return ZeroingData(nocopy: nb, count: n)
     }
 
-    @objc(withOffset:count:)
     public func withBytesOffset(_ offset: Int, count: Int) -> ZeroingData {
         let nb = ZeroingData.alloc(count)
         if count > 0 { nb.initialize(from: _bytes.advanced(by: offset), count: count) }
