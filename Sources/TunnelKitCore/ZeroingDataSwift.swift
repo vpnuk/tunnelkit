@@ -146,6 +146,13 @@ public final class ZeroingData: NSObject {
         withBytesOffset(offset, count: count)
     }
 
+
+    /// Alias matching call-site: controlBuffer.remove(untilOffset: offset)
+    public func remove(untilOffset offset: Int) { removeUntilOffset(offset) }
+
+    /// Alias matching call-site: prefix.isEqual(to: someData) where someData is Data
+    public func isEqual(to data: Data) -> Bool { isEqual(toData: data as NSData) }
+
     @objc(UInt16ValueFromOffset:)
     public func uint16Value(fromOffset from: Int) -> UInt16 {
         return UInt16(_bytes[from]) | (UInt16(_bytes[from + 1]) << 8)
