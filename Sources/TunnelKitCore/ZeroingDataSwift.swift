@@ -148,7 +148,7 @@ public final class ZeroingData: NSObject {
 
 
     /// Alias matching call-site: controlBuffer.remove(untilOffset: offset)
-    public func remove(untilOffset offset: Int) { removeUntilOffset(offset) }
+    @nonobjc public func remove(untilOffset offset: Int) { removeUntilOffset(offset) }
 
     /// Alias matching call-site: prefix.isEqual(to: someData) where someData is Data
     public func isEqual(to data: Data) -> Bool { isEqual(toData: data as NSData) }
