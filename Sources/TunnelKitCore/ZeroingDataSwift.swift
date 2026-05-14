@@ -132,6 +132,21 @@ public final class ZeroingData: NSObject {
         return ZeroingData(nocopy: nb, count: count)
     }
 
+
+    // MARK: - Swift-name aliases (call sites use these names)
+
+    /// Alias for appendData — matches Swift naming used in EncryptionBridge etc.
+    public func append(_ other: ZeroingData) { appendData(other) }
+
+    /// Alias for appendingData — matches Swift naming used in EncryptionBridge etc.
+    public func appending(_ other: ZeroingData) -> ZeroingData { appendingData(other) }
+
+    /// Alias for withBytesOffset — matches Swift naming used in EncryptionBridge etc.
+    /// (The @objc selector is already "withOffset:count:" for ObjC callers.)
+    public func withOffset(_ offset: Int, count: Int) -> ZeroingData {
+        withBytesOffset(offset, count: count)
+    }
+
     @objc(UInt16ValueFromOffset:)
     public func uint16Value(fromOffset from: Int) -> UInt16 {
         return UInt16(_bytes[from]) | (UInt16(_bytes[from + 1]) << 8)
