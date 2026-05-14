@@ -28,7 +28,6 @@ import NetworkExtension
 import TunnelKitCore
 import TunnelKitAppExtension
 import TunnelKitOpenVPNCore
-import CTunnelKitOpenVPNProtocol
 
 class NETCPLink: LinkInterface {
     private let impl: NWTCPConnection
